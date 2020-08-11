@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.find_sijang;
 
 import org.junit.Test;
 
