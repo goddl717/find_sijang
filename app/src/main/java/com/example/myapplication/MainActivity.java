@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,19 +18,29 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+import java.util.HashMap;
+import java.util.Map;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     //define view objects
+    private DatabaseReference mPostReference;
     EditText editTextEmail;
     EditText editTextPassword;
+    EditText editTextName;
+    EditText editTextTel;
+    EditText editAddress;
+    CheckBox checkBoxAdmin;
     Button buttonSignup;
     TextView textviewSingin;
     TextView textviewMessage;
     ProgressDialog progressDialog;
     //define firebase object
     FirebaseAuth firebaseAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,16 +49,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //initializig firebase auth object
         firebaseAuth = FirebaseAuth.getInstance();
 
-        if(firebaseAuth.getCurrentUser() != null){
+        if (firebaseAuth.getCurrentUser() != null) {
             //이미 로그인 되었다면 이 액티비티를 종료함
             finish();
             //그리고 profile 액티비티를 연다.
             startActivity(new Intent(getApplicationContext(), ProfileActivity.class)); //추가해 줄 ProfileActivity
         }
         //initializing views
+        editTextName = (EditText) findViewById(R.id.editTextName);
+        editTextTel = (EditText) findViewById(R.id.editTextTel);
+        editAddress = (EditText) findViewById(R.id.editTexAdress);
+        checkBoxAdmin = (CheckBox)findViewById(R.id.isAdmin);
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
-        textviewSingin= (TextView) findViewById(R.id.textViewSignin);
+        textviewSingin = (TextView) findViewById(R.id.textViewSignin);
         textviewMessage = (TextView) findViewById(R.id.textviewMessage);
         buttonSignup = (Button) findViewById(R.id.buttonSignup);
         progressDialog = new ProgressDialog(this);
@@ -56,17 +71,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonSignup.setOnClickListener(this);
         textviewSingin.setOnClickListener(this);
     }
+
     //Firebse creating a new user
-    private void registerUser(){
+    private void registerUser() {
         //사용자가 입력하는 email, password를 가져온다.
-        String email = editTextEmail.getText().toString().trim();
+        final String name = editTextName.getText().toString().trim();
+        final String tel = editTextTel.getText().toString().trim();
+        final String address = editAddress.getText().toString().trim();
+        final String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
         //email과 password가 비었는지 아닌지를 체크 한다.
-        if(TextUtils.isEmpty(email)){
+        if (TextUtils.isEmpty(email)) {
             Toast.makeText(this, "Email을 입력해 주세요.", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(TextUtils.isEmpty(password)){
+        if (TextUtils.isEmpty(password)) {
             Toast.makeText(this, "Password를 입력해 주세요.", Toast.LENGTH_SHORT).show();
         }
 
@@ -79,7 +98,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                            postFirebaseDatabase(user.getUid(), name, tel, email, address, checkBoxAdmin.isChecked());
                             finish();
                             startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                         } else {
@@ -93,14 +114,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    public void postFirebaseDatabase(String uid, String name, String tel, String email, String address, boolean isAdmin) {
+        mPostReference = FirebaseDatabase.getInstance().getReference();
+        UserPost post = new UserPost(name, tel, email, address, isAdmin);
+        Map<String, Object> postValues = post.toMap();
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/users/" + uid, postValues);
+        mPostReference.updateChildren(childUpdates);
+    }
+
+
     @Override
     public void onClick(View view) {
-        if(view == buttonSignup) {
+        if (view == buttonSignup) {
             //TODO
             registerUser();
         }
 
-        if(view == textviewSingin) {
+        if (view == textviewSingin) {
             //TODO
             startActivity(new Intent(this, LoginActivity.class)); //추가해 줄 로그인 액티비티
         }
