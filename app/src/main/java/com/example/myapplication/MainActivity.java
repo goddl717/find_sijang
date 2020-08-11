@@ -1,4 +1,4 @@
-package com.example.find_sijang;
+package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
