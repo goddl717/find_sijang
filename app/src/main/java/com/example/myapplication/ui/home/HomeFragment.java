@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.myapplication.R;
 
 public class HomeFragment extends Fragment {
-
+    //프래그먼트는
     private HomeViewModel homeViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -23,6 +23,8 @@ public class HomeFragment extends Fragment {
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+        //xml 데이터를 객체화 시키는 것.
+
         final TextView textView = root.findViewById(R.id.text_home);
         homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override

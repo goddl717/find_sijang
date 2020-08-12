@@ -52,14 +52,14 @@ public class UserFragment extends Fragment {
             getActivity().finish();
             startActivity(new Intent(getActivity(), LoginActivity.class));
         }
+        else {
+            //유저가 있다면, null이 아니면 계속 진행
+            FirebaseUser user = firebaseAuth.getCurrentUser();
 
-        //유저가 있다면, null이 아니면 계속 진행
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-
-        //textViewUserEmail의 내용을 변경해 준다.
-        Log.v("jiwon",user.getEmail());
-        textViewUserEmail.setText("반갑습니다.\n" + user.getEmail().toString() + "으로 로그인 하였습니다.");
-
+            //textViewUserEmail의 내용을 변경해 준다.
+            Log.v("jiwon", user.getEmail());
+            textViewUserEmail.setText("반갑습니다.\n" + user.getEmail().toString() + "으로 로그인 하였습니다.");
+        }
 //        //logout button event
 //        buttonLogout.setOnClickListener(new View.OnClickListener() {
 //            @Override
