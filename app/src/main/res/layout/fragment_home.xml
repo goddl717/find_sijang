@@ -16,6 +16,8 @@
         android:text="송현동 1910-32"
         android:textAlignment="center"
         android:textSize="25sp"
+        android:paddingLeft="10sp"
+        android:paddingRight="10sp"
         />
 
     <GridLayout
@@ -88,12 +90,15 @@
         android:layout_height="wrap_content"
         android:text="서문시장"
         android:textAlignment="center"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:layout_marginTop="20sp"
+        android:layout_marginBottom="15sp"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_market"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:scrollbars="horizontal"
         tools:listitem="@layout/market_item" />
 
@@ -103,12 +108,14 @@
         android:layout_height="wrap_content"
         android:text="관문시장"
         android:textAlignment="center"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:layout_marginTop="20sp"
+        android:layout_marginBottom="15sp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_market2"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:scrollbars="horizontal"
         tools:listitem="@layout/market_item" />
 

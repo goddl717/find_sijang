@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.AddressActivity;
@@ -58,6 +59,7 @@ public class HomeFragment extends Fragment {
 
 
         RecyclerView recyclerView2 = (RecyclerView) root.findViewById(R.id.recyclerview_market2);
+
         LinearLayoutManager horizontalLayoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView2.setLayoutManager(horizontalLayoutManager2);
         StoreAdapter marketAdapter2 = new StoreAdapter();
