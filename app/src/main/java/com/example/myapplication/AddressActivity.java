@@ -43,4 +43,13 @@ public class AddressActivity extends AppCompatActivity {
         browser.loadUrl("http://findsijang.dothome.co.kr/");
 
     }
+
+    @Override
+    public void onBackPressed() {
+        if(browser.canGoBack()){
+            browser.goBack();
+        }else{
+            super.onBackPressed();
+        }
+    }
 }
