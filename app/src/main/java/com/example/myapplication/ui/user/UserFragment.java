@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.user;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,13 +9,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.myapplication.LoginActivity;
 import com.example.myapplication.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -41,8 +46,8 @@ public class UserFragment extends Fragment {
         //initializing views
 
         textViewUserEmail = (TextView) root.findViewById(R.id.textviewUserEmail);
-//        buttonLogout = (Button) root.findViewById(R.id.buttonLogout);
-//        textivewDelete = (TextView) root.findViewById(R.id.textviewDelete);
+        buttonLogout = (Button) root.findViewById(R.id.buttonLogout);
+        textivewDelete = (TextView) root.findViewById(R.id.textviewDelete);
 
         //initializing firebase authentication object
         firebaseAuth = FirebaseAuth.getInstance();
@@ -51,52 +56,50 @@ public class UserFragment extends Fragment {
         if (firebaseAuth.getCurrentUser() == null) {
             getActivity().finish();
             startActivity(new Intent(getActivity(), LoginActivity.class));
+        } else {
+            //유저가 있다면, null이 아니면 계속 진행
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            //textViewUserEmail의 내용을 변경해 준다.
+            textViewUserEmail.setText("반갑습니다.\n" + user.getEmail().toString() + "으로 로그인 하였습니다.");
         }
 
-        //유저가 있다면, null이 아니면 계속 진행
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-
-        //textViewUserEmail의 내용을 변경해 준다.
-        Log.v("jiwon",user.getEmail());
-        textViewUserEmail.setText("반갑습니다.\n" + user.getEmail().toString() + "으로 로그인 하였습니다.");
-
-//        //logout button event
-//        buttonLogout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                firebaseAuth.signOut();
-//                getActivity().finish();
-//                startActivity(new Intent(getActivity(), LoginActivity.class));
-//            }
-//        });
-//        textivewDelete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                AlertDialog.Builder alert_confirm = new AlertDialog.Builder(getActivity());
-//                alert_confirm.setMessage("정말 계정을 삭제 할까요?").setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-//                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//                                user.delete()
-//                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                            @Override
-//                                            public void onComplete(@NonNull Task<Void> task) {
-//                                                Toast.makeText(getActivity(), "계정이 삭제 되었습니다.", Toast.LENGTH_LONG).show();
-////                                                startActivity(new Intent(getApplicationContext(), SignUpActivity.class));
-//                                            }
-//                                        });
-//                            }
-//                        }
-//                );
-//                alert_confirm.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        Toast.makeText(getActivity(), "취소", Toast.LENGTH_LONG).show();
-//                    }
-//                });
-//                alert_confirm.show();
-//            }
-//        });
+        //logout button event
+        buttonLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firebaseAuth.signOut();
+                getActivity().finish();
+                startActivity(new Intent(getActivity(), LoginActivity.class));
+            }
+        });
+        textivewDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alert_confirm = new AlertDialog.Builder(getActivity());
+                alert_confirm.setMessage("정말 계정을 삭제 할까요?").setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                user.delete()
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                Toast.makeText(getActivity(), "계정이 삭제 되었습니다.", Toast.LENGTH_LONG).show();
+//                                                startActivity(new Intent(getApplicationContext(), SignUpActivity.class));
+                                            }
+                                        });
+                            }
+                        }
+                );
+                alert_confirm.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(getActivity(), "취소", Toast.LENGTH_LONG).show();
+                    }
+                });
+                alert_confirm.show();
+            }
+        });
 
 
         return root;
