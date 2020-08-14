@@ -145,6 +145,7 @@ public class HomeFragment extends Fragment {
 
         }
     }
+    //ㅇㅇㅇ
 
     void checkRunTimePermission() {
 
