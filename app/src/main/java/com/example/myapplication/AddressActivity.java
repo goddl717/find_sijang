@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -29,6 +30,9 @@ public class AddressActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("배달 주소 설정");
+        
 
         browser = (WebView) findViewById(R.id.webView);
         browser.getSettings().setJavaScriptEnabled(true);
