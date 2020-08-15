@@ -4,14 +4,17 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 public class AddressActivity extends AppCompatActivity {
     private WebView browser;
-
+    private SharedPreferences sharedPreferences;
+    String result_data;
     class MyJavaScriptInterface
     {
         @JavascriptInterface
@@ -20,7 +23,8 @@ public class AddressActivity extends AppCompatActivity {
 
             Bundle extra = new Bundle();
             Intent intent = new Intent();
-            extra.putString("data", data);
+            result_data = data.substring(7,data.length()).replaceAll("\\(.*?\\)", ""); // 우편번호 제거;
+            extra.putString("data", result_data);
             intent.putExtras(extra);
             setResult(RESULT_OK, intent);
             finish();
@@ -55,5 +59,13 @@ public class AddressActivity extends AppCompatActivity {
         }else{
             super.onBackPressed();
         }
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(AddressActivity.this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("address",result_data);
+        editor.apply();
     }
 }

@@ -31,6 +31,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private DatabaseReference mPostReference;
     EditText editTextEmail;
     EditText editTextPassword;
+    EditText eidtTextPasswordConfirm;
     EditText editTextName;
     EditText editTextTel;
     EditText editAddress;
@@ -66,6 +67,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         checkBoxAdmin = (CheckBox) findViewById(R.id.isAdmin);
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
+        eidtTextPasswordConfirm = (EditText) findViewById(R.id.editTextPasswordConfrim);
         textviewSingin = (TextView) findViewById(R.id.textViewSignin);
         textviewMessage = (TextView) findViewById(R.id.textviewMessage);
         buttonSignup = (Button) findViewById(R.id.buttonSignup);
@@ -91,6 +93,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         final String address = editAddress.getText().toString().trim();
         final String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
+        String passwordConfirm = eidtTextPasswordConfirm.getText().toString().trim();
 
         //email과 password가 비었는지 아닌지를 체크 한다.
         if (TextUtils.isEmpty(email)) {
@@ -99,6 +102,11 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         }
         if (TextUtils.isEmpty(password)) {
             Toast.makeText(this, "Password를 입력해 주세요.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!editTextPassword.getText().toString().equals(eidtTextPasswordConfirm.getText().toString())) {
+            Toast.makeText(this, "Password를 다시 확인해주세요", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         //email과 password가 제대로 입력되어 있다면 계속 진행된다.
@@ -123,7 +131,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         progressDialog.dismiss();
                     }
                 });
-
     }
 
     public void postFirebaseDatabase(String uid, String name, String tel, String email, String address, boolean isAdmin) {
@@ -160,9 +167,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 if (resultCode == RESULT_OK) {
 
                     String data = intent.getExtras().getString("data");
-                    String result = data.substring(7, data.length()); // 우편번호 제거
                     if (data != null)
-                        editAddress.setText(result);
+                        editAddress.setText(data);
                 }
                 break;
         }
