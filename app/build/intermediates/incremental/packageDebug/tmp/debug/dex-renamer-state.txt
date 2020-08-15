@@ -1,0 +1,4 @@
+#Sat Aug 15 11:22:57 KST 2020
+base.0=/Users/main/Documents/GitHub/find_sijang/app/build/intermediates/dex/debug/mergeDexDebug/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex
