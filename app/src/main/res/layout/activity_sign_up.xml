@@ -74,7 +74,9 @@
         android:layout_gravity="center_horizontal"
         android:layout_margin="10dp"
         android:hint="주소"
-        android:inputType="text" />
+        android:inputType="text"
+        android:focusable="false"
+        />
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
