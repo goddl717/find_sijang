@@ -1,0 +1,107 @@
+{
+  "users" : {
+    "157QUfKMgNeIOi04U27JwyBk2m93" : {
+      "address" : "deagu",
+      "email" : "goddl77@naver.com",
+      "isAdmin" : false,
+      "name" : "heo",
+      "tel" : "010-8131-3584"
+    },
+    "1E2f6fa839ZIbrToT9b5Au2yONU2" : {
+      "address" : "",
+      "email" : "jwkim9205@gmail.com",
+      "isAdmin" : true,
+      "name" : "시발존나어렵다",
+      "tel" : "01023691608"
+    },
+    "MtTO4eHXNcVl89TePiLmxdHpdNm2" : {
+      "address" : "",
+      "email" : "jwk1608@naver.com",
+      "isAdmin" : true,
+      "name" : "김지원",
+      "tel" : "01023691608"
+    },
+    "PpeuutuSJyUcmw9m7A48B2mwXqr2" : {
+      "address" : "",
+      "email" : "ejejdnd@naver.com",
+      "isAdmin" : false,
+      "name" : "",
+      "tel" : ""
+    },
+    "RLZotkPqmoPLy0ImFZ7hV4Dv8lo1" : {
+      "address" : "",
+      "email" : "jwkim9205@naver.com",
+      "isAdmin" : false,
+      "name" : "",
+      "tel" : ""
+    },
+    "ZbbjOtLNBuhqKK4c7upikyl1TVx1" : {
+      "address" : "deagu",
+      "email" : "goddl77@naver.com",
+      "isAdmin" : false,
+      "name" : "heo",
+      "tel" : "01081313584"
+    },
+    "oiwsCdfZqdZWPqkKXRxspggvKSt2" : {
+      "address" : "",
+      "email" : "jsjdjeke@naver.com",
+      "isAdmin" : false,
+      "name" : "",
+      "tel" : ""
+    },
+    "qMtc0t5zkbV1AEahjGcVcroh7ae2" : {
+      "address" : "deagu suseong gu",
+      "email" : "goddl717@naver.com",
+      "isAdmin" : true,
+      "name" : "young",
+      "tel" : "01081313584"
+    }
+  },
+  "시장" : {
+    "산격종합시장" : {
+      "address" : "대구 북구 대동로1길 34 ",
+      "latitude" : 35.8984424,
+      "longitude" : 128.610515
+    },
+    "서대구시장" : {
+      "address" : "대구 달서구 명덕로2길 30",
+      "latitude" : 35.8605158,
+      "longitude" : 128.570848
+    },
+    "서문시장" : {
+      "address" : "대구광역시 중구 대신동 큰장로26길 45",
+      "latitude" : 35.8689195,
+      "longitude" : 128.580778
+    },
+    "서변중앙시장" : {
+      "addrress" : "대구 북구 호국로43길 27 ",
+      "latitude" : 35.9210179,
+      "longitude" : 128.596171
+    },
+    "신내당시장" : {
+      "address" : "대구 달서구 야외음악당로39길 62",
+      "latitude" : 35.8546358,
+      "longitude" : 128.553862
+    },
+    "용산종합큰시장" : {
+      "address" : "대구 달서구 달구벌대로301길 187-11 ",
+      "latitude" : 35.8580629,
+      "longitude" : 128.53117
+    },
+    "월배신시장" : {
+      "adress" : "대구 달서구 월배로28안길 54",
+      "latitude" : 35.8132544,
+      "longitude" : 128.527887
+    },
+    "중평시장" : {
+      "address" : "대구 서구 서대구로17길 16",
+      "latitude" : 35.8653859,
+      "longitude" : 128.553906
+    },
+    "청과시장" : {
+      "address" : "대구 북구 칠성시장로 34 ",
+      "latitude" : 35.8772274,
+      "longitude" : 128.603952
+    }
+  }
+}
