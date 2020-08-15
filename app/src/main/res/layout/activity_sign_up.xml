@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="10dp"
-        android:hint="Enter email"
+        android:hint="이메일 주소"
         android:inputType="textEmailAddress" />
 
 
@@ -38,7 +38,15 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="10dp"
-        android:hint="Enter password"
+        android:hint="비밀번호"
+        android:inputType="textPassword" />
+    <EditText
+        android:id="@+id/editTextPasswordConfrim"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"
+        android:hint="비밀번호 확인"
         android:inputType="textPassword" />
 
     <EditText
@@ -47,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="10dp"
-        android:hint="Enter name"
+        android:hint="이름"
         android:inputType="textPersonName" />
 
     <EditText
@@ -56,7 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="10dp"
-        android:hint="Enter phonenumber"
+        android:hint="전화번호"
         android:inputType="phone" />
 
     <EditText
@@ -65,7 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="10dp"
-        android:hint="Enter address"
+        android:hint="주소"
         android:inputType="text" />
     <CheckBox
         android:layout_width="wrap_content"

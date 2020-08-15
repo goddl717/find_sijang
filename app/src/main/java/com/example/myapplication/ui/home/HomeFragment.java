@@ -78,8 +78,9 @@ public class HomeFragment extends Fragment {
                 if (resultCode == RESULT_OK) {
 
                     String data = intent.getExtras().getString("data");
+                    String result = data.substring(7,data.length()).replaceAll("\\(.*?\\)", ""); // 우편번호 제거
                     if (data != null)
-                        text_address.setText(data);
+                        text_address.setText(result);
                 }
                 break;
         }

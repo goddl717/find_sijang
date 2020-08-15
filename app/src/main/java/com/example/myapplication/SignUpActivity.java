@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -41,6 +42,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     //define firebase object
     FirebaseAuth firebaseAuth;
 
+    private static final int SEARCH_ADDRESS_ACTIVITY = 10000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +61,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         //initializing views
         editTextName = (EditText) findViewById(R.id.editTextName);
         editTextTel = (EditText) findViewById(R.id.editTextTel);
+        editTextTel.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         editAddress = (EditText) findViewById(R.id.editTexAdress);
         checkBoxAdmin = (CheckBox) findViewById(R.id.isAdmin);
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
@@ -70,6 +74,13 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         //button click event
         buttonSignup.setOnClickListener(this);
         textviewSingin.setOnClickListener(this);
+        editAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(SignUpActivity.this, AddressActivity.class);
+                startActivityForResult(i, SEARCH_ADDRESS_ACTIVITY);
+            }
+        });
     }
 
     //Firebse creating a new user
@@ -80,6 +91,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         final String address = editAddress.getText().toString().trim();
         final String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
+
         //email과 password가 비었는지 아닌지를 체크 한다.
         if (TextUtils.isEmpty(email)) {
             Toast.makeText(this, "Email을 입력해 주세요.", Toast.LENGTH_SHORT).show();
@@ -134,6 +146,25 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         if (view == textviewSingin) {
             //TODO
             startActivity(new Intent(this, LoginActivity.class)); //추가해 줄 로그인 액티비티
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        switch (requestCode) {
+
+            case SEARCH_ADDRESS_ACTIVITY:
+
+                if (resultCode == RESULT_OK) {
+
+                    String data = intent.getExtras().getString("data");
+                    String result = data.substring(7, data.length()); // 우편번호 제거
+                    if (data != null)
+                        editAddress.setText(result);
+                }
+                break;
         }
     }
 }
