@@ -35,10 +35,10 @@ public class SearchFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference();
-        Query query = myRef.child("users").child("157QUfKMgNeIOi04U27JwyBk2m93");
-        Log.v("jiwon", query.toString());
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference myRef = database.getReference();
+//        Query query = myRef.child("users").child("157QUfKMgNeIOi04U27JwyBk2m93");
+//        Log.v("jiwon", query.toString());
 
         return inflater.inflate(R.layout.fragment_search, container, false);
     }
