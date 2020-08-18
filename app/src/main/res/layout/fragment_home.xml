@@ -99,8 +99,9 @@
         android:id="@+id/recyclerview_market"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="horizontal"
-        tools:listitem="@layout/market_item" />
+        android:scrollbars="none"
+        tools:listitem="@layout/market_item"
+        />
 
     <TextView
         android:id="@+id/market_title2"
@@ -116,7 +117,7 @@
         android:id="@+id/recyclerview_market2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="horizontal"
+        android:scrollbars="none"
         tools:listitem="@layout/market_item" />
 
 </LinearLayout>

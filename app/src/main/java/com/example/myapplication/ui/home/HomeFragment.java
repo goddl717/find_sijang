@@ -53,6 +53,7 @@ public class HomeFragment extends Fragment {
 
         RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.recyclerview_market);
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+
         recyclerView.setLayoutManager(horizontalLayoutManager);
         StoreAdapter marketAdapter = new StoreAdapter();
         recyclerView.setAdapter(marketAdapter);
