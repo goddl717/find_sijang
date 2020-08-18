@@ -1,34 +1,13 @@
-package com.example.myapplication;
+package com.example.myapplication.ui.search;
 
-public class users {
+class users {
 
-    public users() {
-    }
+    public String name;
+    public String tel;
+    public String email;
+    public String address;
+    public boolean isAdmin;
 
-    private String users;
-    private String name;
-    private String tel;
-    private String email;
-    private String address;
-    private boolean isAdmin;
-
-
-    public users(String users, String name, String tel, String email, String address, boolean isAdmin) {
-        this.users = users;
-        this.name = name;
-        this.tel = tel;
-        this.email = email;
-        this.address = address;
-        this.isAdmin = isAdmin;
-    }
-
-    public String getUsers() {
-        return users;
-    }
-
-    public void setUsers(String users) {
-        this.users = users;
-    }
 
     public String getName() {
         return name;
@@ -69,6 +48,8 @@ public class users {
     public void setAdmin(boolean admin) {
         isAdmin = admin;
     }
+
+
 
 
 }
