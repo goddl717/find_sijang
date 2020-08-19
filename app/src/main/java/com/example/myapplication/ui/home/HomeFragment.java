@@ -77,7 +77,7 @@ public class HomeFragment extends Fragment {
         //Log.v("tag1",query.endAt(100).toString());
 
 
-        query = FirebaseDatabase.getInstance().getReference().child("시장/신매시장/");
+        query = FirebaseDatabase.getInstance().getReference().child("시장/");
 
         ValueEventListener postListener = new ValueEventListener() {
             @Override
@@ -92,9 +92,14 @@ public class HomeFragment extends Fragment {
                 */
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) { // 반복문으로 데이터 List를 추출해냄
-                    Address add = snapshot.getValue(Address.class);
+                    //Address add = snapshot.getValue(Address.class);
                     Market mar = snapshot.getValue(Market.class);
-                    Store sto = snapshot.getValue(Store.class);
+                    Log.v("tag",mar.getDetail());
+                    //Log.v("tag",mar.getAddress());
+                    //Log.v("tag",mar.getDetail());
+
+                    Store sto = mar.getStore();
+
                     Log.v("tag",sto.getCansold());
                     Log.v("tag",sto.getItem());
                     Log.v("tag",sto.getUid());

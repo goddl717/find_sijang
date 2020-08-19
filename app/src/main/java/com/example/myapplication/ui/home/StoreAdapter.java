@@ -35,7 +35,7 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ((RowCell)holder).imageView.setImageResource(R.drawable.shop);
-        ((RowCell)holder).textView.setText(userInforArrayList.get(position).getUid());
+        ((RowCell)holder).textView.setText(userInforArrayList.get(position).getItem());
     }
 
     @Override
