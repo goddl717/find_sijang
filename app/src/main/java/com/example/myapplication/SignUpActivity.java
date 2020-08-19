@@ -122,7 +122,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                             FirebaseUser user = firebaseAuth.getCurrentUser();
                             postFirebaseDatabase(user.getUid(), name, tel, email, address, checkBoxAdmin.isChecked());
                             finish();
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+//                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         } else {
                             //에러발생시
                             textviewMessage.setText("에러유형\n - 이미 등록된 이메일  \n -암호 최소 6자리 이상 \n - 서버에러");

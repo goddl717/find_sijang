@@ -17,6 +17,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class SearchFragment extends Fragment {
@@ -34,10 +35,10 @@ public class SearchFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
 
-        DatabaseControl d = new DatabaseControl();
-        System.out.println(d.StringJson("/users"));
-        System.out.println(d.StringJson("/users"));
-
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference myRef = database.getReference();
+//        Query query = myRef.child("users").child("157QUfKMgNeIOi04U27JwyBk2m93");
+//        Log.v("jiwon", query.toString());
 
         return inflater.inflate(R.layout.fragment_search, container, false);
     }

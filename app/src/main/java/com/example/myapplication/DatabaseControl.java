@@ -13,29 +13,24 @@ public class DatabaseControl {
     private DatabaseReference mDatabase;
     public String ret = "";
 
-    public DatabaseControl(){
+    public DatabaseControl() {
 
     }
 
     // path를 주면 Json을 리턴을 하는 함수
-    public String StringJson(final String path1){
+    public String StringJson(final String path1) {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-
-        ValueEventListener postListener = new ValueEventListener() {
-
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
                 //Post post = dataSnapshot.getValue(Post.class);
                 // ...
-                Log.v("tag",dataSnapshot.child(path1).toString());
-                System.out.println(dataSnapshot.child(path1).toString());
+                Log.v("tag", dataSnapshot.child(path1).toString());
+
                 //여기서 값을 처리하면 되지 않을까?
-                ret = dataSnapshot.child(path1).toString();
-
-
-
+                ret = dataSnapshot.child(path1).getValue().toString();
             }
 
             @Override
@@ -44,10 +39,7 @@ public class DatabaseControl {
                 Log.w("tag", "loadPost:onCancelled", databaseError.toException());
                 // ...
             }
-        };
-
-        mDatabase.addValueEventListener(postListener);
-
-    return ret;
-    };
+        });
+        return ret;
+    }
 }

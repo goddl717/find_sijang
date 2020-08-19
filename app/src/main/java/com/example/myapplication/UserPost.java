@@ -8,22 +8,12 @@ import java.util.Map;
 
 //@IgnoreExtraProperties
 public class UserPost {
-    private String users;
+
     private String name;
     private String tel;
     private String email;
     private String address;
-    private boolean isAdmin;
-
-    public UserPost(String users, String name, String tel, String email, String address, boolean isAdmin) {
-        this.users = users;
-        this.name = name;
-        this.tel = tel;
-        this.email = email;
-        this.address = address;
-        this.isAdmin = isAdmin;
-    }
-
+    private String isAdmin;
 
 
     public String getName() {
@@ -58,20 +48,12 @@ public class UserPost {
         this.address = address;
     }
 
-    public boolean isAdmin() {
+    public String isAdmin() {
         return isAdmin;
     }
 
-    public void setAdmin(boolean admin) {
+    public void setAdmin(String admin) {
         isAdmin = admin;
-    }
-
-    public String getUser() {
-        return users;
-    }
-
-    public void setUser(String users) {
-        this.users = users;
     }
 
 
@@ -79,7 +61,7 @@ public class UserPost {
         // Default constructor required for calls to DataSnapshot.getValue(FirebasePost.class)
     }
 
-    public UserPost(String name, String tel, String email, String address, boolean isAdmin) {
+    public UserPost(String name, String tel, String email, String address, String isAdmin) {
 
         this.name = name;
         this.tel = tel;
@@ -91,7 +73,6 @@ public class UserPost {
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
-
         result.put("name", name);
         result.put("tel", tel);
         result.put("email", email);

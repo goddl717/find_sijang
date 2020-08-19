@@ -12,10 +12,13 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.UserPost;
+
+import java.util.ArrayList;
 
 public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    int images[] = {R.drawable.shop,R.drawable.shop,R.drawable.shop,R.drawable.shop,R.drawable.shop,R.drawable.shop};
-    String texts[] = {"지원이네","영행이네","철구네","지원이네","영행이네","철구네"};
+    //int images[] = {R.drawable.shop,R.drawable.shop,R.drawable.shop,R.drawable.shop,R.drawable.shop,R.drawable.shop};
+    //String texts[] = {"지원이네","영행이네","철구네","지원이네","영행이네","철구네"};
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -25,15 +28,22 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return new RowCell(view);
     }
 
+    private ArrayList<UserPost> userInforArrayList;
+    //초기화 작업.
+
+    public StoreAdapter(ArrayList<UserPost> userInforArrayList){
+        this.userInforArrayList = userInforArrayList;
+    }
+
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((RowCell)holder).imageView.setImageResource(images[position]);
-        ((RowCell)holder).textView.setText(texts[position]);
+        ((RowCell)holder).imageView.setImageResource(R.drawable.shop);
+        ((RowCell)holder).textView.setText(userInforArrayList.get(position).getName());
     }
 
     @Override
     public int getItemCount() {
-        return images.length;
+        return userInforArrayList.size();
     }
     private static class RowCell extends RecyclerView.ViewHolder {
         public ImageView imageView;

@@ -12,7 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".AddressActivity"></activity>
-        <activity android:name=".address.SearchAddress" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".FindActivity" />
         <activity android:name=".LoginActivity" />

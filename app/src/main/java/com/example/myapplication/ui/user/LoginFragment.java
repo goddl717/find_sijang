@@ -1,5 +1,6 @@
-package com.example.myapplication.ui.search;
+package com.example.myapplication.ui.user;
 
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
@@ -11,21 +12,22 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.myapplication.R;
 
-public class SearchFragment extends Fragment {
+public class LoginFragment extends Fragment {
 
-    private SearchViewModel mViewModel;
 
-    public static SearchFragment newInstance() {
-        return new SearchFragment();
+    public static LoginFragment newInstance() {
+        return new LoginFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_search, container, false);
+        View root = inflater.inflate(R.layout.login_fragment, container, false);
+        return root;
     }
 
     @Override
