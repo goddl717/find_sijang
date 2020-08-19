@@ -27,8 +27,10 @@ public class MainActivity extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //데이터베이스에 쓰는 방법.
+        //myRef.setValue("Hello, World!");
 
-        myRef.setValue("Hello, World!");
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

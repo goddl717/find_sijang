@@ -1,6 +1,5 @@
 package com.example.myapplication.ui.home;
 
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,11 +7,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.UserPost;
 
 import java.util.ArrayList;
 
@@ -28,17 +25,17 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return new RowCell(view);
     }
 
-    private ArrayList<UserPost> userInforArrayList;
+    private ArrayList<Store> userInforArrayList;
     //초기화 작업.
 
-    public StoreAdapter(ArrayList<UserPost> userInforArrayList){
+    public StoreAdapter(ArrayList<Store> userInforArrayList){
         this.userInforArrayList = userInforArrayList;
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ((RowCell)holder).imageView.setImageResource(R.drawable.shop);
-        ((RowCell)holder).textView.setText(userInforArrayList.get(position).getName());
+        ((RowCell)holder).textView.setText(userInforArrayList.get(position).getUid());
     }
 
     @Override

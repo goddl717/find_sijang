@@ -1,14 +1,7 @@
 package com.example.myapplication.ui.home;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -16,22 +9,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.myapplication.AddressActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.UserPost;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -39,14 +33,17 @@ import static android.app.Activity.RESULT_OK;
 
 public class HomeFragment extends Fragment {
 
+
     private TextView text_address;
     private static final int SEARCH_ADDRESS_ACTIVITY = 10000;
     private SharedPreferences sharedPreferences;
-    ArrayList<UserPost> InfoArrayList;
+    ArrayList<Store> InfoArrayList;
     StoreAdapter marketAdapter;
     StoreAdapter marketAdapter2;
+    private DatabaseReference mFirebaseDatabaseReference;
 
-    
+    private FirebaseRecyclerAdapter<UserPost,RecyclerView.ViewHolder> mFirebaseAdapter;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -71,25 +68,39 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(horizontalLayoutManager);
 
-         InfoArrayList = new ArrayList<>();
+         InfoArrayList = new ArrayList<Store>();
          DatabaseReference mDatabase;
 
          //users 대신 시장에 대한 정보 3개나 2개 넣고.
+        Query query;
+        //Log.v("tag1",query.toString());
+        //Log.v("tag1",query.endAt(100).toString());
 
-        mDatabase = FirebaseDatabase.getInstance().getReference("users");
+
+        query = FirebaseDatabase.getInstance().getReference().child("시장/신매시장/");
+
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 // Get Post object and use the values to update the UI
 
+                Log.v("tag",dataSnapshot.toString());
                 /*
-                Log.v("tag",dataSnapshot.child("users").toString());
                 String json = dataSnapshot.child("users").getValue().toString();
                 Log.v("tag",json);
                 */
+
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) { // 반복문으로 데이터 List를 추출해냄
-                    UserPost user = snapshot.getValue(UserPost.class); // 만들어뒀던 User 객체에 데이터를 담는다.
-                    InfoArrayList.add(user); // 담은 데이터들을 배열리스트에 넣고 리사이클러뷰로 보낼 준비
+                    Address add = snapshot.getValue(Address.class);
+                    Market mar = snapshot.getValue(Market.class);
+                    Store sto = snapshot.getValue(Store.class);
+                    Log.v("tag",sto.getCansold());
+                    Log.v("tag",sto.getItem());
+                    Log.v("tag",sto.getUid());
+
+                    // 만들어뒀던 User 객체에 데이터를 담는다.
+                    InfoArrayList.add(sto); // 담은 데이터들을 배열리스트에 넣고 리사이클러뷰로 보낼 준비
                 }
 
                 //리스트에 추가 하는데 여기서 파싱한 값을 가져와서
@@ -105,8 +116,7 @@ public class HomeFragment extends Fragment {
                 // ...
             }
         };
-
-        mDatabase.addValueEventListener(postListener);
+        query.addValueEventListener(postListener);
 
 
 

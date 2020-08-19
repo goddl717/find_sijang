@@ -1,27 +1,52 @@
 package com.example.myapplication.ui.home;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Store {
-    private String title;
-    private int ResourceID;
+    public String uid;
+    public String cansold;
+    public String item;
 
-    public Store(String title, int resourceID) {
-        this.title = title;
-        ResourceID = resourceID;
+    public String getUid() {
+        return uid;
     }
 
-    public String getTitle() {
-        return title;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public String getCansold() {
+        return cansold;
     }
 
-    public int getResourceID() {
-        return ResourceID;
+    public void setCansold(String cansold) {
+        this.cansold = cansold;
     }
 
-    public void setResourceID(int resourceID) {
-        ResourceID = resourceID;
+    public String getItem() {
+        return item;
     }
+
+    public void setItem(String item) {
+        this.item = item;
+    }
+
+    public Store(){
+
+}
+    public Store(String uid, String cansold, String item) {
+        this.uid = uid;
+        this.cansold = cansold;
+        this.item = item;
+    }
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("uid", uid);
+        result.put("cansold", cansold);
+        result.put("item", item);
+        return result;
+    }
+
 }

@@ -120,7 +120,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             FirebaseUser user = firebaseAuth.getCurrentUser();
-                            postFirebaseDatabase(user.getUid(), name, tel, email, address, checkBoxAdmin.isChecked());
+                            postFirebaseDatabase(user.getUid(), name, tel, email, address, "true" );
                             finish();
 //                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         } else {
@@ -133,7 +133,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 });
     }
 
-    public void postFirebaseDatabase(String uid, String name, String tel, String email, String address, boolean isAdmin) {
+    public void postFirebaseDatabase(String uid, String name, String tel, String email, String address, String isAdmin) {
         mPostReference = FirebaseDatabase.getInstance().getReference();
         UserPost post = new UserPost(name, tel, email, address, isAdmin);
         Map<String, Object> postValues = post.toMap();
