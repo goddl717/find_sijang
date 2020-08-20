@@ -33,8 +33,6 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         //int width = parent.getResources().getDisplayMetrics().widthPixels/3;
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.market_item,parent,false);
         //view.setLayoutParams(new LinearLayoutCompat.LayoutParams(width, width));
-
-
         return new RowCell(view);
     }
     public StoreAdapter(Context mContext){
@@ -91,18 +89,16 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         // 데이터 리스트로부터 아이템 데이터 참조.
                         Store sto = (Store)StoreList.get(pos);
                         String temp = StoreKey.get(pos);
-
-                        Log.v("tag1",sto.getDetail());
+                        //Log.v("tag1",sto.getDetail());
                         Context context = v.getContext();
+                        //인텐트 저장.
                         Intent intent =  new Intent(v.getContext(),StoreMain.class);
                         intent.putExtra("key",temp);
                         intent.putExtra("marketname",marketName);
                         intent.putExtra("userid",sto.getUserId());
                         intent.putExtra("storename",sto.getStoreName());
                         intent.putExtra("imageurl",sto.getImageUrl());
-
                         intent.putExtra("userId",sto.getUserId());
-
                         //intent 에 store 정보를 모두 보낸다.
                         context.startActivity(intent);
                         Toast.makeText(context, pos +"store id"+temp +"부모주소"+marketName, Toast.LENGTH_LONG).show();
