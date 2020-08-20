@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.myapplication.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -120,9 +121,13 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             FirebaseUser user = firebaseAuth.getCurrentUser();
-                            postFirebaseDatabase(user.getUid(), name, tel, email, address, "true" );
+
+                            String check = "false";
+                            if(checkBoxAdmin.isChecked()){
+                                check = "true";
+                            }
+                            postFirebaseDatabase(user.getUid(), name, tel, email, address, check);
                             finish();
-//                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         } else {
                             //에러발생시
                             textviewMessage.setText("에러유형\n - 이미 등록된 이메일  \n -암호 최소 6자리 이상 \n - 서버에러");
@@ -135,7 +140,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     public void postFirebaseDatabase(String uid, String name, String tel, String email, String address, String isAdmin) {
         mPostReference = FirebaseDatabase.getInstance().getReference();
-        UserPost post = new UserPost(name, tel, email, address, isAdmin);
+        User post = new User(name, tel, email, address, isAdmin);
         Map<String, Object> postValues = post.toMap();
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/users/" + uid, postValues);

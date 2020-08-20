@@ -1,7 +1,4 @@
-package com.example.myapplication.ui.user;
-
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
+package com.example.myapplication.navfragment.user;
 
 import android.content.Intent;
 import android.os.Bundle;

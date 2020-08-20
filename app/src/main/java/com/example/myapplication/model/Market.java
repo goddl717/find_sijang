@@ -1,13 +1,17 @@
-package com.example.myapplication.ui.home;
+package com.example.myapplication.model;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Market {
-    public Address address;
-    public String imageurl;
-    public String detail;
-    public Store store;
+    private Address address;
+    private String imageurl;
+    private String detail;
+    private Store store;
+
+    public Market(){
+
+    }
 
     public Market(Address address, String imageurl, String detail, Store store) {
         this.address = address;
@@ -15,8 +19,6 @@ public class Market {
         this.detail = detail;
         this.store = store;
     }
-
-
 
     public Store getStore() {
         return store;
@@ -49,11 +51,6 @@ public class Market {
     public void setDetail(String detail) {
         this.detail = detail;
     }
-
-    public Market(){
-
-    }
-
 
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();

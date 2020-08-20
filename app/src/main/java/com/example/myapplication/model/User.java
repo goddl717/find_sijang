@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.model;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 //@IgnoreExtraProperties
-public class UserPost {
+public class User {
 
     private String name;
     private String tel;
@@ -15,6 +15,18 @@ public class UserPost {
     private String address;
     private String isAdmin;
 
+    public User() {
+        // Default constructor required for calls to DataSnapshot.getValue(User.class)
+    }
+
+    public User(String name, String tel, String email, String address, String isAdmin) {
+
+        this.name = name;
+        this.tel = tel;
+        this.email = email;
+        this.address = address;
+        this.isAdmin = isAdmin;
+    }
 
     public String getName() {
         return name;
@@ -56,19 +68,6 @@ public class UserPost {
         isAdmin = admin;
     }
 
-
-    public UserPost() {
-        // Default constructor required for calls to DataSnapshot.getValue(FirebasePost.class)
-    }
-
-    public UserPost(String name, String tel, String email, String address, String isAdmin) {
-
-        this.name = name;
-        this.tel = tel;
-        this.email = email;
-        this.address = address;
-        this.isAdmin = isAdmin;
-    }
 
     @Exclude
     public Map<String, Object> toMap() {

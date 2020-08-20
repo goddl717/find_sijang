@@ -1,10 +1,7 @@
-package com.example.myapplication.ui.user;
+package com.example.myapplication.navfragment.user;
 
-import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +14,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
 
-import com.example.myapplication.LoginActivity;
-import com.example.myapplication.MainActivity;
+
 import com.example.myapplication.R;
-import com.example.myapplication.SignUpActivity;
-import com.example.myapplication.ui.home.HomeFragment;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -47,9 +41,7 @@ public class UserFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_user, container, false);
 
-
         firebaseAuth = FirebaseAuth.getInstance();
-
         buttonLogout = (Button) root.findViewById(R.id.buttonLogout);
         textivewDelete = (TextView) root.findViewById(R.id.textviewDelete);
 
@@ -60,7 +52,6 @@ public class UserFragment extends Fragment {
             buttonLogout.setVisibility(View.GONE);
             textivewDelete.setVisibility(View.GONE);
         }
-
 
         //logout button event
         buttonLogout.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +82,6 @@ public class UserFragment extends Fragment {
                                                 // 데이터 베이스 삭제
                                                 DatabaseReference userDBRef = FirebaseDatabase.getInstance().getReference("users/"+currentUser);
                                                 userDBRef.removeValue();
-
                                                 Fragment childFragment = new LogoutFragment();
                                                 FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                                                 transaction.replace(R.id.child_fragment_container, childFragment).commit();
@@ -148,11 +138,11 @@ public class UserFragment extends Fragment {
             textivewDelete.setVisibility(View.GONE);
 
         } else {
-            buttonLogout.setVisibility(View.VISIBLE);
-            textivewDelete.setVisibility(View.VISIBLE);
             Fragment childFragment = new LoginFragment();
             FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
             transaction.replace(R.id.child_fragment_container, childFragment).commit();
+            buttonLogout.setVisibility(View.VISIBLE);
+            textivewDelete.setVisibility(View.VISIBLE);
         }
     }
 }
