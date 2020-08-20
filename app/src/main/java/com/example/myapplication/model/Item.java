@@ -1,27 +1,19 @@
 package com.example.myapplication.model;
 
 public class Item {
-    private String itemName;
     private String imageUrl;
-    private String count;
+    private String name;
+    private String detail;
     private String price;
 
     public Item() {
     }
 
-    public Item(String itemName, String imageUrl, String count, String price) {
-        this.itemName = itemName;
+    public Item(String imageUrl, String name, String detail, String price) {
         this.imageUrl = imageUrl;
-        this.count = count;
+        this.name = name;
+        this.detail = detail;
         this.price = price;
-    }
-
-    public String getItemName() {
-        return itemName;
-    }
-
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
     }
 
     public String getImageUrl() {
@@ -32,12 +24,20 @@ public class Item {
         this.imageUrl = imageUrl;
     }
 
-    public String getCount() {
-        return count;
+    public String getName() {
+        return name;
     }
 
-    public void setCount(String count) {
-        this.count = count;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
     public String getPrice() {

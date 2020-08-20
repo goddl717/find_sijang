@@ -1,7 +1,9 @@
 package com.example.myapplication.model;
 
+import com.example.myapplication.model.Item;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Store {
     private String userId;
@@ -9,14 +11,13 @@ public class Store {
     private String imageUrl;
     private String detail;
     private String category;
-    HashMap<String, Item> items = new HashMap<>();
 
-    public HashMap<String, Item> getItems() {
-        return items;
+    public String getCategory() {
+        return category;
     }
 
-    public void setItems(HashMap<String, Item> items) {
-        this.items = items;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public Store(String userId, String storeName, String imageUrl, String detail, String category) {
@@ -27,8 +28,8 @@ public class Store {
         this.category = category;
     }
 
-    public Store() {
-    }
+
+
 
     public String getUserId() {
         return userId;
@@ -62,20 +63,24 @@ public class Store {
         this.detail = detail;
     }
 
-    public String getCategory() {
-        return category;
-    }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public Store(){
+
     }
-//    public Map<String, Object> toMap() {
-//        HashMap<String, Object> result = new HashMap<>();
-//        result.put("userId", userId);
-//        result.put("storeName", storeName);
-//        result.put("imageUrl", imageUrl);
-//        result.put("detail", detail);
-//        result.put("item", item.toMap());
-//        return result;
-//    }
+    public Store(String userId, String storeName, String imageUrl, String detail) {
+        this.userId = userId;
+        this.storeName = storeName;
+        this.imageUrl = imageUrl;
+        this.detail = detail;
+
+    }
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("userId", userId);
+        result.put("storeName", storeName);
+        result.put("imageUrl", imageUrl);
+        result.put("detail", detail);
+
+        return result;
+    }
 }
