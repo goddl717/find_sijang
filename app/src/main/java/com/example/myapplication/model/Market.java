@@ -7,26 +7,20 @@ public class Market {
     private Address address;
     private String imageurl;
     private String detail;
-    private Store store;
+
 
     public Market(){
 
     }
 
-    public Market(Address address, String imageurl, String detail, Store store) {
+    public Market(Address address, String imageurl, String detail) {
         this.address = address;
         this.imageurl = imageurl;
         this.detail = detail;
-        this.store = store;
+
     }
 
-    public Store getStore() {
-        return store;
-    }
 
-    public void setStore(Store store) {
-        this.store = store;
-    }
 
     public Address getAddress() {
         return address;
@@ -57,8 +51,6 @@ public class Market {
         result.put("address", address.toMap());
         result.put("imageurl", imageurl);
         result.put("detail", detail);
-        result.put("store",store.toMap());
-
         return result;
     }
 }
