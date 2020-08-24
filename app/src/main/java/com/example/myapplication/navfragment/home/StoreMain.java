@@ -50,10 +50,20 @@ public class StoreMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_main);
 
+        Intent intent = getIntent();
+        Log.v("tag1",intent.getStringExtra("marketname"));
+        database = FirebaseDatabase.getInstance();
+        String marketName = intent.getStringExtra("marketname");
+        String key = intent.getStringExtra("key");
+        Log.v("tag1",key);
+
+        TextView store_name = (TextView)findViewById(R.id.store_name);
+        store_name.setText(intent.getStringExtra("storename"));
+
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
 
-        StorageReference imagesRef = storageRef.child("/img/test.jpeg");
+        StorageReference imagesRef = storageRef.child("/img/"+key+".jpg");
         final ImageView ivGlide = (ImageView)findViewById(R.id.imageView);
 
         imagesRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
@@ -98,18 +108,7 @@ public class StoreMain extends AppCompatActivity {
         // 어댑터 할당, 어댑터는 기본 어댑터를 확장한 커스텀 어댑터를 사용할 것이다.
         final ItemAdapter adapter = new ItemAdapter(itemlist);
         recyclerView.setAdapter(adapter);
-
-
         //인턴트 불러오기.
-        Intent intent = getIntent();
-        Log.v("tag1",intent.getStringExtra("marketname"));
-        database = FirebaseDatabase.getInstance();
-        String marketName = intent.getStringExtra("marketname");
-        String key = intent.getStringExtra("key");
-
-        TextView store_name = (TextView)findViewById(R.id.store_name);
-        store_name.setText(intent.getStringExtra("storename"));
-
         //store의 모든 값을 다 가져오면,
         //Log.v("tag1",marketName+key);
 
