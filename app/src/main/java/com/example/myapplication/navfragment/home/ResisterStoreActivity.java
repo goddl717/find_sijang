@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,13 +62,9 @@ public class ResisterStoreActivity extends AppCompatActivity {
     List<Map<String, Object>> dialogMarketItemList;
     List<Map<String, Object>> dialogCategoryItemList;
     private static final String TAG_TEXT = "text";
-    String[] markets = {"동문시장", "남문시장", "신매시장", "북문시장", "감문시장", "서리시장", "동문시장", "남문시장"
-//            ,"동문시장", "남문시장", "신매시장", "북문시장", "감문시장", "서리시장", "동문시장", "남문시장",
-//            "동문시장", "남문시장", "신매시장", "북문시장", "감문시장", "서리시장", "동문시장", "남문시장",
-//            "동문시장", "남문시장", "신매시장", "북문시장", "감문시장", "서리시장", "동문시장", "남문시장",
-//            "동문시장", "남문시장", "신매시장", "북문시장", "감문시장", "서리시장", "동문시장", "남문시장"
-    };
-    String[] categories = {"과일","정육"};
+    String[] markets = {"동문시장", "남문시장", "신매시장", "서문시장"};
+    String[] categories = {"과일", "정육"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +82,7 @@ public class ResisterStoreActivity extends AppCompatActivity {
 
         /*권한*/
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},0);
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
         }
         imageViewStore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,10 +103,27 @@ public class ResisterStoreActivity extends AppCompatActivity {
         buttonResister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //사용자가 입력하는 email, password를 가져온다.
+                final String name = editTextStoreName.getText().toString().trim();
+                final String category = editTextCategory.getText().toString().trim();
+                final String market = editTextMarketName.getText().toString().trim();
+
+                if (TextUtils.isEmpty(name)) {
+                    Toast.makeText(ResisterStoreActivity.this, "가게 이름을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (TextUtils.isEmpty(category)) {
+                    Toast.makeText(ResisterStoreActivity.this, "취급품목을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (TextUtils.isEmpty(market)) {
+                    Toast.makeText(ResisterStoreActivity.this, "소속시장을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 upload(imagePath);
                 Toast.makeText(ResisterStoreActivity.this, "가게 등록이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                 finish();
-
             }
         });
         //market dialog
@@ -140,7 +154,6 @@ public class ResisterStoreActivity extends AppCompatActivity {
             itemMap.put(TAG_TEXT, markets[i]);
             dialogMarketItemList.add(itemMap);
         }
-
     }
 
     private void showAlertDialogForMarket() {
@@ -169,7 +182,7 @@ public class ResisterStoreActivity extends AppCompatActivity {
             }
         });
 
-        dialog.setCancelable(false);
+//        dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }
@@ -178,7 +191,7 @@ public class ResisterStoreActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(ResisterStoreActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.market_dialog, null);
-        TextView textView = (TextView)view.findViewById(R.id.textview_alterdialog_title);
+        TextView textView = (TextView) view.findViewById(R.id.textview_alterdialog_title);
         textView.setText("취급하는 품목을 고르시오");
         builder.setView(view);
 
@@ -202,7 +215,7 @@ public class ResisterStoreActivity extends AppCompatActivity {
             }
         });
 
-        dialog.setCancelable(false);
+//        dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }
@@ -211,32 +224,33 @@ public class ResisterStoreActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GALLEY_CODE) {
-//            imageViewStore.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//            imageViewStore.setImageURI(data.getData());
 //          이미지 불러오기
+            imageViewStore.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imagePath = getPath(data.getData());
             File f = new File(imagePath);
             imageViewStore.setImageURI(Uri.fromFile(f));
-
         }
     }
-    public String getPath(Uri uri){
-        String [] proj = { MediaStore.Images.Media.DATA };
+
+    public String getPath(Uri uri) {
+        String[] proj = {MediaStore.Images.Media.DATA};
         CursorLoader cursorLoader = new CursorLoader(this, uri, proj, null, null, null);
 
-        Cursor cursor = cursorLoader.loadInBackground ();
-        int index = cursor.getColumnIndexOrThrow (MediaStore.Images.Media.DATA);
+        Cursor cursor = cursorLoader.loadInBackground();
+        int index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
 
         cursor.moveToFirst();
 
         return cursor.getString(index);
     }
 
-    private void upload(String uri){
-        final StorageReference storageRef = storage.getReference();;
+    private void upload(String uri) {
+        final StorageReference storageRef = storage.getReference();
+
+        //uri가 null값일때 처리
 
         Uri file = Uri.fromFile(new File(uri));
-        StorageReference riversRef = storageRef.child("images/"+file.getLastPathSegment());
+        StorageReference riversRef = storageRef.child("images/" + file.getLastPathSegment());
         UploadTask uploadTask = riversRef.putFile(file);
 
         // Register observers to listen for when the download is done or if it fails
@@ -244,7 +258,7 @@ public class ResisterStoreActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Handle unsuccessful uploads
-                Log.v("jiwon","fail");
+                Log.v("jiwon", "fail");
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -259,7 +273,7 @@ public class ResisterStoreActivity extends AppCompatActivity {
                 store.setCategory(editTextCategory.getText().toString().trim());
                 store.setDetail(editTextDetail.getText().toString().trim());
                 database.getReference().child("시장").child(marketName).child("store").push().setValue(store);
-                Log.v("jiwon","succes");
+                Log.v("jiwon", "succes");
             }
         });
     }

@@ -94,7 +94,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         final String address = editAddress.getText().toString().trim();
         final String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
-        String passwordConfirm = eidtTextPasswordConfirm.getText().toString().trim();
 
         //email과 password가 비었는지 아닌지를 체크 한다.
         if (TextUtils.isEmpty(email)) {

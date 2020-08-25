@@ -127,7 +127,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
-            android:text="카테고리"
+            android:text="취급품목"
             android:textSize="22sp" />
 
         <EditText

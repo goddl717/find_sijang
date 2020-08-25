@@ -25,6 +25,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.model.Market;
 import com.example.myapplication.model.Store;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -43,6 +44,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private static final int SEARCH_ADDRESS_ACTIVITY = 10000;
     private SharedPreferences sharedPreferences;
     private FirebaseDatabase database;
+    private FirebaseAuth auth;
     StoreAdapter storeAdapter;
     StoreAdapter sotreAdapter2;
     private ArrayList<Store> storeArrayList = new ArrayList<Store>();
@@ -124,6 +126,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         fab_main.setOnClickListener(this);
         fab_sub1.setOnClickListener(this);
         fab_sub2.setOnClickListener(this);
+
+        auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() == null) {
+            fab_main.hide();
+        }
+
         return root;
     }
 
