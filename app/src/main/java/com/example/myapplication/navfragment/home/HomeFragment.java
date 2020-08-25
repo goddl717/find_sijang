@@ -1,5 +1,6 @@
 package com.example.myapplication.navfragment.home;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,7 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -20,6 +24,7 @@ import com.example.myapplication.R;
 
 import com.example.myapplication.model.Market;
 import com.example.myapplication.model.Store;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -31,7 +36,7 @@ import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements View.OnClickListener{
 
 
     private TextView text_address;
@@ -43,7 +48,11 @@ public class HomeFragment extends Fragment {
     private ArrayList<Store> storeArrayList = new ArrayList<Store>();
     private ArrayList<String> storeKey = new ArrayList<String>();
 
-
+    //  floating actionbar
+    private Context mContext;
+    private FloatingActionButton fab_main, fab_sub1, fab_sub2;
+    private Animation fab_open, fab_close;
+    private boolean isFabOpen = false;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -105,9 +114,16 @@ public class HomeFragment extends Fragment {
 //         sotreAdapter2 = new StoreAdapter(InfoArrayList);
 //        recyclerView2.setAdapter(sotreAdapter2);
 
-
-
-
+        // floatingActionButton
+        mContext = getActivity();
+        fab_open = AnimationUtils.loadAnimation(mContext, R.anim.fab_open);
+        fab_close = AnimationUtils.loadAnimation(mContext, R.anim.fab_close);
+        fab_main = (FloatingActionButton) root.findViewById(R.id.fab_main);
+        fab_sub1 = (FloatingActionButton) root.findViewById(R.id.fab_sub1);
+        fab_sub2 = (FloatingActionButton) root.findViewById(R.id.fab_sub2);
+        fab_main.setOnClickListener(this);
+        fab_sub1.setOnClickListener(this);
+        fab_sub2.setOnClickListener(this);
         return root;
     }
 
@@ -122,5 +138,43 @@ public class HomeFragment extends Fragment {
                 }
                 break;
         }
+    }
+    // floatingActionButton 동작
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fab_main:
+                toggleFab();
+                break;
+            case R.id.fab_sub1:
+                toggleFab();
+//                startActivity(new Intent(getActivity(), ResisterStoreActivity.class));
+                break;
+            case R.id.fab_sub2:
+                toggleFab();
+                Toast.makeText(getActivity(), "Map Open-!", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
+    private void toggleFab() {
+
+        if (isFabOpen) {
+            fab_main.setImageResource(R.drawable.ic_add);
+            fab_sub1.startAnimation(fab_close);
+            fab_sub2.startAnimation(fab_close);
+            fab_sub1.setClickable(false);
+            fab_sub2.setClickable(false);
+            isFabOpen = false;
+
+        } else {
+            fab_main.setImageResource(R.drawable.ic_close);
+            fab_sub1.startAnimation(fab_open);
+            fab_sub2.startAnimation(fab_open);
+            fab_sub1.setClickable(true);
+            fab_sub2.setClickable(true);
+            isFabOpen = true;
+        }
+
     }
 }

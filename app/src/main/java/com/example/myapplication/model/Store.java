@@ -1,7 +1,5 @@
 package com.example.myapplication.model;
 
-import com.example.myapplication.model.Item;
-
 import java.util.HashMap;
 import java.util.Map;
 
