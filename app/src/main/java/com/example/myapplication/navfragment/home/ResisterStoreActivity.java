@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
@@ -57,14 +58,16 @@ public class ResisterStoreActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private String imagePath;
     // market dialog
-    List<Map<String, Object>> dialogItemList;
+    List<Map<String, Object>> dialogMarketItemList;
+    List<Map<String, Object>> dialogCategoryItemList;
     private static final String TAG_TEXT = "text";
-    String[] text = {"동문시장", "남문시장", "신매시장", "북문시장", "감문시장", "서리시장", "동문시장", "남문시장"
+    String[] markets = {"동문시장", "남문시장", "신매시장", "북문시장", "감문시장", "서리시장", "동문시장", "남문시장"
 //            ,"동문시장", "남문시장", "신매시장", "북문시장", "감문시장", "서리시장", "동문시장", "남문시장",
 //            "동문시장", "남문시장", "신매시장", "북문시장", "감문시장", "서리시장", "동문시장", "남문시장",
 //            "동문시장", "남문시장", "신매시장", "북문시장", "감문시장", "서리시장", "동문시장", "남문시장",
 //            "동문시장", "남문시장", "신매시장", "북문시장", "감문시장", "서리시장", "동문시장", "남문시장"
     };
+    String[] categories = {"과일","정육"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,19 +116,34 @@ public class ResisterStoreActivity extends AppCompatActivity {
         editTextMarketName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAlertDialog();
+                showAlertDialogForMarket();
             }
         });
 
-        dialogItemList = new ArrayList<>();
-        for (int i = 0; i < text.length; i++) {
+        editTextCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAlertDialogForCategory();
+            }
+        });
+
+        dialogCategoryItemList = new ArrayList<>();
+        for (int i = 0; i < categories.length; i++) {
             Map<String, Object> itemMap = new HashMap<>();
-            itemMap.put(TAG_TEXT, text[i]);
-            dialogItemList.add(itemMap);
+            itemMap.put(TAG_TEXT, categories[i]);
+            dialogCategoryItemList.add(itemMap);
         }
+
+        dialogMarketItemList = new ArrayList<>();
+        for (int i = 0; i < markets.length; i++) {
+            Map<String, Object> itemMap = new HashMap<>();
+            itemMap.put(TAG_TEXT, markets[i]);
+            dialogMarketItemList.add(itemMap);
+        }
+
     }
 
-    private void showAlertDialog() {
+    private void showAlertDialogForMarket() {
         AlertDialog.Builder builder = new AlertDialog.Builder(ResisterStoreActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.market_dialog, null);
@@ -135,7 +153,7 @@ public class ResisterStoreActivity extends AppCompatActivity {
         final AlertDialog dialog = builder.create();
 
         //리사이클러뷰로 교체!!! - 데이터가 많아지면 레이아웃이 깨짐
-        SimpleAdapter simpleAdapter = new SimpleAdapter(ResisterStoreActivity.this, dialogItemList,
+        SimpleAdapter simpleAdapter = new SimpleAdapter(ResisterStoreActivity.this, dialogMarketItemList,
                 R.layout.market_dialog_row,
                 new String[]{TAG_TEXT},
                 new int[]{R.id.alertDialogItemTextView});
@@ -146,7 +164,40 @@ public class ResisterStoreActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                editTextMarketName.setText(text[position]);
+                editTextMarketName.setText(markets[position]);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+    }
+
+    private void showAlertDialogForCategory() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ResisterStoreActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.market_dialog, null);
+        TextView textView = (TextView)view.findViewById(R.id.textview_alterdialog_title);
+        textView.setText("취급하는 품목을 고르시오");
+        builder.setView(view);
+
+        final ListView listview = (ListView) view.findViewById(R.id.listview_alterdialog_list);
+        final AlertDialog dialog = builder.create();
+
+        //리사이클러뷰로 교체!!! - 데이터가 많아지면 레이아웃이 깨짐
+        SimpleAdapter simpleAdapter = new SimpleAdapter(ResisterStoreActivity.this, dialogCategoryItemList,
+                R.layout.market_dialog_row,
+                new String[]{TAG_TEXT},
+                new int[]{R.id.alertDialogItemTextView});
+
+        listview.setAdapter(simpleAdapter);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                editTextCategory.setText(categories[position]);
                 dialog.dismiss();
             }
         });
