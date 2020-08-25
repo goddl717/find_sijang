@@ -148,7 +148,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.fab_sub1:
                 toggleFab();
-//                startActivity(new Intent(getActivity(), ResisterStoreActivity.class));
+                startActivity(new Intent(getActivity(), ResisterStoreActivity.class));
                 break;
             case R.id.fab_sub2:
                 toggleFab();
