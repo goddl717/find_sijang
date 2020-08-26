@@ -3,9 +3,12 @@ package com.example.myapplication.navfragment.home;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +26,9 @@ import com.example.myapplication.AddressActivity;
 import com.example.myapplication.R;
 
 import com.example.myapplication.model.Market;
+import com.example.myapplication.model.Pair_temp;
 import com.example.myapplication.model.Store;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -32,8 +37,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -50,11 +58,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private ArrayList<Store> storeArrayList = new ArrayList<Store>();
     private ArrayList<String> storeKey = new ArrayList<String>();
 
+
     //  floating actionbar
     private Context mContext;
     private FloatingActionButton fab_main, fab_sub1, fab_sub2;
     private Animation fab_open, fab_close;
     private boolean isFabOpen = false;
+
+    private List<Address> mListAddress;
+    Address mAddress;
+    //private Geocoder mGeocoder = new Geocoder(this.getContext());
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -74,6 +88,48 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String current_address = sharedPreferences.getString("address", "주소 입력");
         text_address.setText(current_address);
+        final ArrayList<Pair_temp> addlist = new ArrayList<Pair_temp>();
+
+
+        if (current_address!= null) {
+            Log.v("tag1", current_address);
+            database = FirebaseDatabase.getInstance();
+            database.getReference().child("시장").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Log.v("tag1",snapshot.toString());
+                    for (DataSnapshot snap : snapshot.getChildren()) { // 반복문으로 데이터 List를 추출해냄
+                        Market mar = snap.getValue(Market.class);
+                        String temp = snap.getKey();
+                        Log.v("tag1 = marketname",temp);
+
+                        String add = mar.getAddress();
+                        Log.v("tag1 = marketaddress",add);
+                        //Address add = snapshot.getValue(Address.class);
+                        Pair_temp pa = new Pair_temp(temp,add);
+                        addlist.add(pa);
+                    }
+
+                    // 시장에 대한 정보를 임시 저장. 이 테이블에서 계산식을 구해서 가장 작은 것을 갱신해서 사용한다.
+                    for(int i = 0 ; i < addlist.size();i++) {
+                        Log.v("tag1", addlist.get(i).getFirst() + addlist.get(i).getSecond());
+                        //String result = SearchLocation(addlist.get(i).getSecond());
+                        //Log.v("tag",result);
+                    }
+                }
+
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+
+        }
+        //구글 api를 불러와서 일단은 주소를 변환.
+
+
 
 
         database = FirebaseDatabase.getInstance();
@@ -104,6 +160,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 // ...
             }
         });
+
+
 
         RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.recyclerview_market);
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -185,4 +243,29 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         }
 
     }
+
+/*
+    public String SearchLocation(String location)
+    {
+        String result = "";
+        try{
+            mListAddress = mGeocoder.getFromLocationName(location, 5);
+            if(mListAddress.size() > 0)
+            {
+                mAddress = mListAddress.get(0); // 0 번째 주소값,
+                 result = "lat : " + mAddress.getLatitude() + "\r\n" +
+                "lon : " + mAddress.getLongitude()+ "\r\n" +
+                         "Address : " + mAddress.getAddressLine(0);
+
+            }else
+                Toast.makeText(getContext(), "위치 검색 실패", Toast.LENGTH_SHORT).show();
+        }catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+*/
+
 }

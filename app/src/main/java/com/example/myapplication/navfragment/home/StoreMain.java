@@ -59,10 +59,8 @@ public class StoreMain extends AppCompatActivity {
 
         TextView store_name = (TextView)findViewById(R.id.store_name);
         store_name.setText(intent.getStringExtra("storename"));
-
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
-
         StorageReference imagesRef = storageRef.child("/img/"+key+".jpg");
         final ImageView ivGlide = (ImageView)findViewById(R.id.imageView);
 
