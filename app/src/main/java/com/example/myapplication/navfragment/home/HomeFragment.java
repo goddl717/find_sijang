@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,11 +42,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
+
 
 
     private TextView text_address;
@@ -64,10 +70,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private FloatingActionButton fab_main, fab_sub1, fab_sub2;
     private Animation fab_open, fab_close;
     private boolean isFabOpen = false;
-
+    //private Geocoder geocoder = new Geocoder();
     private List<Address> mListAddress;
     Address mAddress;
-    //private Geocoder mGeocoder = new Geocoder(this.getContext());
+
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -76,6 +82,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         text_address = (TextView) root.findViewById(R.id.current_address);
+        final Geocoder geocoder = new Geocoder(this.getContext());
 
         text_address.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +123,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                         //String result = SearchLocation(addlist.get(i).getSecond());
                         //Log.v("tag",result);
                     }
+                    //위도 경도를 가지고 가장 가까운 위치 2개를 뽑는다 ?
+                    try {
+                        List<Address> temp = geocoder.getFromLocationName("대구광역시 수성구 달구벌대로 3310",5);
+                        Address addtemp = temp.get(0);
+                        Log.v("tag", String.valueOf(addtemp.getLatitude()));
+                        Log.v("tag", String.valueOf(addtemp.getLongitude()));
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                 }
 
 
@@ -243,29 +261,4 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         }
 
     }
-
-/*
-    public String SearchLocation(String location)
-    {
-        String result = "";
-        try{
-            mListAddress = mGeocoder.getFromLocationName(location, 5);
-            if(mListAddress.size() > 0)
-            {
-                mAddress = mListAddress.get(0); // 0 번째 주소값,
-                 result = "lat : " + mAddress.getLatitude() + "\r\n" +
-                "lon : " + mAddress.getLongitude()+ "\r\n" +
-                         "Address : " + mAddress.getAddressLine(0);
-
-            }else
-                Toast.makeText(getContext(), "위치 검색 실패", Toast.LENGTH_SHORT).show();
-        }catch(IOException e)
-        {
-            e.printStackTrace();
-        }
-
-        return result;
-    }
-*/
-
 }
