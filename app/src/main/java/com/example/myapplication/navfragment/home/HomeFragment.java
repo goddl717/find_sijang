@@ -122,18 +122,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                         Log.v("tag1", addlist.get(i).getFirst() + addlist.get(i).getSecond());
                         //String result = SearchLocation(addlist.get(i).getSecond());
                         //Log.v("tag",result);
-                    }
-                    //위도 경도를 가지고 가장 가까운 위치 2개를 뽑는다 ?
-                    try {
-                        List<Address> temp = geocoder.getFromLocationName("대구광역시 수성구 달구벌대로 3310",5);
-                        Address addtemp = temp.get(0);
-                        Log.v("tag", String.valueOf(addtemp.getLatitude()));
-                        Log.v("tag", String.valueOf(addtemp.getLongitude()));
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                        //위도 경도를 가지고 가장 가까운 위치 2개를 뽑는다 ?. .
+                        try {
+                            List<Address> temp = geocoder.getFromLocationName(addlist.get(i).getSecond(), 1);
+                            Address addtemp = temp.get(0);
+                            Log.v("tag", String.valueOf(addtemp.getLatitude()));
+                            Log.v("tag", String.valueOf(addtemp.getLongitude()));
 
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        catch(IndexOutOfBoundsException e){
+                            e.printStackTrace();
+                        }
+                    }
                 }
 
 
