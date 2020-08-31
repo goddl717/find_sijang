@@ -8,6 +8,8 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -53,7 +55,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
-
+    String current_address = null;
 
     private TextView text_address;
     private static final int SEARCH_ADDRESS_ACTIVITY = 10000;
@@ -64,9 +66,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     StoreAdapter sotreAdapter2;
     private ArrayList<Store> storeArrayList = new ArrayList<Store>();
     private ArrayList<String> storeKey = new ArrayList<String>();
-    private String sijang_name = "";
 
 
+    final ArrayList<Pair_temp> addlist = new ArrayList<Pair_temp>();
 
 
     //  floating actionbar
@@ -74,19 +76,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private FloatingActionButton fab_main, fab_sub1, fab_sub2;
     private Animation fab_open, fab_close;
     private boolean isFabOpen = false;
-    //private Geocoder geocoder = new Geocoder();
+    private Geocoder geocoder = null;
+
     private List<Address> mListAddress;
     Address mAddress;
-
-
+    private String marketName;
+     View root;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+         root = inflater.inflate(R.layout.fragment_home, container, false);
 
         text_address = (TextView) root.findViewById(R.id.current_address);
-        final Geocoder geocoder = new Geocoder(this.getContext());
+        geocoder = new Geocoder(this.getContext());
 
         text_address.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,112 +100,40 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         });
         // 기기에 주소 정보 저장
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        final String current_address = sharedPreferences.getString("address", "주소 입력");
+        current_address = sharedPreferences.getString("address", "주소 입력");
+        Log.v("tag3",current_address);
+
         text_address.setText(current_address);
-        final ArrayList<Pair_temp> addlist = new ArrayList<Pair_temp>();
+
+        text_address.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                current_address = text_address.getText().toString();
+
+                storeAdapter.notifyDataSetChanged();
+                function_real_start();
 
 
-        if (current_address!= null) {
-            Log.v("tag1", current_address);
-            database = FirebaseDatabase.getInstance();
-            database.getReference().child("시장").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    Log.v("tag1",snapshot.toString());
-                    for (DataSnapshot snap : snapshot.getChildren()) { // 반복문으로 데이터 List를 추출해냄
-                        Market mar = snap.getValue(Market.class);
-                        String temp = snap.getKey();
-                        Log.v("tag1 = marketname",temp);
-                        String add = mar.getAddress();
-                        Log.v("tag1 = marketaddress",add);
-                        //Address add = snapshot.getValue(Address.class);
-                        Pair_temp pa = new Pair_temp(temp,add);
-                        addlist.add(pa);
-                    }
-
-                    // 시장에 대한 정보를 임시 저장. 이 테이블에서 계산식을 구해서 가장 작은 것을 갱신해서 사용한다.
-                    for(int i = 0 ; i < addlist.size();i++) {
-                        Log.v("tag1", addlist.get(i).getFirst() + addlist.get(i).getSecond());
-                        //String result = SearchLocation(addlist.get(i).getSecond());
-                        //Log.v("tag",result);
-
-                        //위도 경도를 가지고 가장 가까운 위치 2개를 뽑는다 ?. .
-                        try {
-                            List<Address> temp = geocoder.getFromLocationName(addlist.get(i).getSecond(), 1);
-                            Address addtemp = temp.get(0);
-                            addlist.get(i).setLatitude(addtemp.getLatitude());
-                            addlist.get(i).setLongitude(addtemp.getLongitude());
-
-                            Log.v("tag", String.valueOf(addtemp.getLatitude()));
-                            Log.v("tag", String.valueOf(addtemp.getLongitude()));
+            }
+        });
 
 
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        catch(IndexOutOfBoundsException e){
-                            e.printStackTrace();
-                        }
-                    }
-
-
-                    try {
-                        int index = -1;
-                        //현재의 거리를 구한다.
-
-                        double  min = Integer.MAX_VALUE;
-
-                        List<Address> current = geocoder.getFromLocationName(current_address, 1);
-                        double current_logitutde = current.get(0).getLongitude();
-                        double current_latitude = current.get(0).getLatitude();
-
-                        for (int i = 0 ; i < addlist.size();i++)
-                        {
-                            //lat1 , double lng1 , double lat2 , double lng2
-                            double min_temp = getDistance(current_latitude, current_logitutde, addlist.get(i).getLatitude(),addlist.get(i).getLongitude());
-                            Log.v("tag2", String.valueOf(min_temp));
-
-                            if(min > min_temp){
-                                min = min_temp;
-                                index = i;
-                            }
-                        }
-
-                        Log.v("last address",addlist.get(index).getFirst());
-
-                        sijang_name = addlist.get(index).getFirst();
+        function_real_start();// 버튼에 대한 처리를 해야된다.
 
 
 
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (ArrayIndexOutOfBoundsException e){
-                        e.printStackTrace();
-                    }
-
-                    //addlist에 latitude 값과  longitude 값을 넣었다.
-
-                }
-
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-
-
-        }
-        Log.v("value",sijang_name);
-        String marketName = function_to_start(sijang_name);
-        Log.v("value",marketName);
-
-        RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.recyclerview_market);
-        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(horizontalLayoutManager);
-        storeAdapter = new StoreAdapter(storeArrayList,storeKey,marketName);
-        recyclerView.setAdapter(storeAdapter);
 //        RecyclerView recyclerView2 = (RecyclerView) root.findViewById(R.id.recyclerview_market2);
 //        LinearLayoutManager horizontalLayoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
 //        recyclerView2.setLayoutManager(horizontalLayoutManager2);
@@ -298,7 +229,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     public String function_to_start(String sijang_name){
         Log.v("tag3","왜 안나오미;");
 
-        Log.v("tag3",sijang_name+"ㄴㅇㄹ");
+        Log.v("tag3",sijang_name);
         database = FirebaseDatabase.getInstance();
         String marketName = database.getReference().child("시장").child(sijang_name).getKey();
 
@@ -327,7 +258,116 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 // ...
             }
         });
+
+        RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.recyclerview_market);
+        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(horizontalLayoutManager);
+        storeAdapter = new StoreAdapter(storeArrayList,storeKey,marketName);
+        recyclerView.setAdapter(storeAdapter);
+
         return marketName;
+
+    }
+
+    public void function_real_start(){
+        if (current_address!= null) {
+
+
+            Log.v("tag5", current_address);
+            database = FirebaseDatabase.getInstance();
+            database.getReference().child("시장").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Log.v("tag1",snapshot.toString());
+                    for (DataSnapshot snap : snapshot.getChildren()) { // 반복문으로 데이터 List를 추출해냄
+                        Market mar = snap.getValue(Market.class);
+                        String temp = snap.getKey();
+                        Log.v("tag1 = marketname",temp);
+                        String add = mar.getAddress();
+                        Log.v("tag1 = marketaddress",add);
+                        //Address add = snapshot.getValue(Address.class);
+                        Pair_temp pa = new Pair_temp(temp,add);
+                        addlist.add(pa);
+                    }
+
+                    // 시장에 대한 정보를 임시 저장. 이 테이블에서 계산식을 구해서 가장 작은 것을 갱신해서 사용한다.
+                    for(int i = 0 ; i < addlist.size();i++) {
+                        Log.v("tag1", addlist.get(i).getFirst() + addlist.get(i).getSecond());
+                        //String result = SearchLocation(addlist.get(i).getSecond());
+                        //Log.v("tag",result);
+
+                        //위도 경도를 가지고 가장 가까운 위치 2개를 뽑는다 ?. .
+                        try {
+                            List<Address> temp = geocoder.getFromLocationName(addlist.get(i).getSecond(), 1);
+                            Address addtemp = temp.get(0);
+                            addlist.get(i).setLatitude(addtemp.getLatitude());
+                            addlist.get(i).setLongitude(addtemp.getLongitude());
+
+                            Log.v("tag", String.valueOf(addtemp.getLatitude()));
+                            Log.v("tag", String.valueOf(addtemp.getLongitude()));
+
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        catch(IndexOutOfBoundsException e){
+                            e.printStackTrace();
+                        }
+                    }
+
+
+                    try {
+                        int index = -1;
+                        //현재의 거리를 구한다.
+
+                        double  min = Integer.MAX_VALUE;
+
+                        List<Address> current = geocoder.getFromLocationName(current_address, 1);
+                        double current_logitutde = current.get(0).getLongitude();
+                        double current_latitude = current.get(0).getLatitude();
+
+                        for (int i = 0 ; i < addlist.size();i++)
+                        {
+                            //lat1 , double lng1 , double lat2 , double lng2
+                            double min_temp = getDistance(current_latitude, current_logitutde, addlist.get(i).getLatitude(),addlist.get(i).getLongitude());
+                            Log.v("tag2", String.valueOf(min_temp));
+
+                            if(min > min_temp){
+                                min = min_temp;
+                                index = i;
+                            }
+                        }
+
+                        Log.v("last address",addlist.get(index).getFirst());
+
+                        String sijang_na1 = addlist.get(index).getFirst();
+                        Log.v("value",sijang_na1);
+                        marketName = function_to_start(sijang_na1);
+                        Log.v("value",marketName);
+
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ArrayIndexOutOfBoundsException e){
+                        e.printStackTrace();
+                    }
+
+                    //addlist에 latitude 값과  longitude 값을 넣었다.
+
+                }
+
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+
+        }
+
+
 
     }
 }
