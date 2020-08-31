@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -63,6 +64,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     StoreAdapter sotreAdapter2;
     private ArrayList<Store> storeArrayList = new ArrayList<Store>();
     private ArrayList<String> storeKey = new ArrayList<String>();
+    private String sijang_name = "";
+
+
 
 
     //  floating actionbar
@@ -93,7 +97,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         });
         // 기기에 주소 정보 저장
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String current_address = sharedPreferences.getString("address", "주소 입력");
+        final String current_address = sharedPreferences.getString("address", "주소 입력");
         text_address.setText(current_address);
         final ArrayList<Pair_temp> addlist = new ArrayList<Pair_temp>();
 
@@ -109,7 +113,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                         Market mar = snap.getValue(Market.class);
                         String temp = snap.getKey();
                         Log.v("tag1 = marketname",temp);
-
                         String add = mar.getAddress();
                         Log.v("tag1 = marketaddress",add);
                         //Address add = snapshot.getValue(Address.class);
@@ -127,8 +130,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                         try {
                             List<Address> temp = geocoder.getFromLocationName(addlist.get(i).getSecond(), 1);
                             Address addtemp = temp.get(0);
+                            addlist.get(i).setLatitude(addtemp.getLatitude());
+                            addlist.get(i).setLongitude(addtemp.getLongitude());
+
                             Log.v("tag", String.valueOf(addtemp.getLatitude()));
                             Log.v("tag", String.valueOf(addtemp.getLongitude()));
+
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -137,6 +144,45 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                             e.printStackTrace();
                         }
                     }
+
+
+                    try {
+                        int index = -1;
+                        //현재의 거리를 구한다.
+
+                        double  min = Integer.MAX_VALUE;
+
+                        List<Address> current = geocoder.getFromLocationName(current_address, 1);
+                        double current_logitutde = current.get(0).getLongitude();
+                        double current_latitude = current.get(0).getLatitude();
+
+                        for (int i = 0 ; i < addlist.size();i++)
+                        {
+                            //lat1 , double lng1 , double lat2 , double lng2
+                            double min_temp = getDistance(current_latitude, current_logitutde, addlist.get(i).getLatitude(),addlist.get(i).getLongitude());
+                            Log.v("tag2", String.valueOf(min_temp));
+
+                            if(min > min_temp){
+                                min = min_temp;
+                                index = i;
+                            }
+                        }
+
+                        Log.v("last address",addlist.get(index).getFirst());
+
+                        sijang_name = addlist.get(index).getFirst();
+
+
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ArrayIndexOutOfBoundsException e){
+                        e.printStackTrace();
+                    }
+
+                    //addlist에 latitude 값과  longitude 값을 넣었다.
+
                 }
 
 
@@ -148,41 +194,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
 
         }
-        //구글 api를 불러와서 일단은 주소를 변환.
-
-
-
-
-        database = FirebaseDatabase.getInstance();
-        String marketName = database.getReference().child("시장").child("서문시장").getKey();
-
-        database.getReference().child("시장").child("서문시장").child("store").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                storeArrayList.clear();
-                Log.v("tag", dataSnapshot.toString());
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) { // 반복문으로 데이터 List를 추출해냄
-                    Store sto = snapshot.getValue(Store.class);
-                    String temp = snapshot.getKey();
-                    Log.v("tag1 = storekey",temp);
-
-                    storeKey.add(temp);
-                    storeArrayList.add(sto);
-                    //Address add = snapshot.getValue(Address.class);
-                    //Market market = snapshot.getValue(Market.class);
-                }
-                storeAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w("TAG", "loadPost:onCancelled", databaseError.toException());
-                // ...
-            }
-        });
-
-
+        Log.v("value",sijang_name);
+        String marketName = function_to_start(sijang_name);
+        Log.v("value",marketName);
 
         RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.recyclerview_market);
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -262,6 +276,58 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             fab_sub2.setClickable(true);
             isFabOpen = true;
         }
+
+    }
+    public double getDistance(double lat1 , double lng1 , double lat2 , double lng2 ){
+        double distance;
+
+        Location locationA = new Location("point A");
+        locationA.setLatitude(lat1);
+        locationA.setLongitude(lng1);
+
+        Location locationB = new Location("point B");
+        locationB.setLatitude(lat2);
+        locationB.setLongitude(lng2);
+
+        distance = locationA.distanceTo(locationB);
+
+        return distance;
+    }
+
+
+    public String function_to_start(String sijang_name){
+        Log.v("tag3","왜 안나오미;");
+
+        Log.v("tag3",sijang_name+"ㄴㅇㄹ");
+        database = FirebaseDatabase.getInstance();
+        String marketName = database.getReference().child("시장").child(sijang_name).getKey();
+
+        database.getReference().child("시장").child(sijang_name).child("store").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                storeArrayList.clear();
+                Log.v("tag3", dataSnapshot.toString());
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) { // 반복문으로 데이터 List를 추출해냄
+                    Store sto = snapshot.getValue(Store.class);
+                    String temp = snapshot.getKey();
+                    Log.v("tag3 = storekey",temp);
+
+                    storeKey.add(temp);
+                    storeArrayList.add(sto);
+                    //Address add = snapshot.getValue(Address.class);
+                    //Market market = snapshot.getValue(Market.class);
+                }
+                storeAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w("TAG", "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        });
+        return marketName;
 
     }
 }

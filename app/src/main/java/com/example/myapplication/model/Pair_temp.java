@@ -4,6 +4,26 @@ public class Pair_temp {
     private String first;
     private String second;
 
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    private double latitude = 0;
+    private double longitude = 0;
+
+
     public Pair_temp() {
     }
 
@@ -27,4 +47,5 @@ public class Pair_temp {
     public void setSecond(String second) {
         this.second = second;
     }
+
 }
